@@ -3,6 +3,8 @@ import axios from 'axios'
 import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
+import delay from 'delay'
+import IssueActionButton from './IssueActionButton'
 
 const IssuesPage = async() => {
   const getData = async() => {
@@ -10,15 +12,10 @@ const IssuesPage = async() => {
     return res.data;
   }
   const issues = await getData();
+  await delay(5000);
   return (
     <div>
-      <div className='mb-5'>
-        <Button>
-          <Link href='/issues/new'>
-            New Issue
-          </Link>
-        </Button>
-      </div>
+      <IssueActionButton />
       <Table.Root variant='surface'>
         <Table.Header>
           <Table.Row>
