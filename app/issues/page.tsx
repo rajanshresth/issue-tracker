@@ -1,4 +1,4 @@
-import { Button, Table } from '@radix-ui/themes'
+import { Table } from '@radix-ui/themes'
 import axios from 'axios'
 import Link from 'next/link'
 import React from 'react'
@@ -12,7 +12,7 @@ const IssuesPage = async() => {
     return res.data;
   }
   const issues = await getData();
-  await delay(5000);
+  await delay(2000);
   return (
     <div>
       <IssueActionButton />
@@ -24,24 +24,26 @@ const IssuesPage = async() => {
             <Table.ColumnHeaderCell className='hidden md:table-cell'>Created</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>
-          {issues.map((issue:any) => (
-            <Table.Row key={issue.id}>
-              <Table.Cell>
-                {issue.title}
-                <div className='block md:hidden'>
-                  <IssueStatusBadge status={issue.status} />
-                </div>
-              </Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>
-                <IssueStatusBadge status={issue.status} />
-              </Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>
-                {new Date(issue.createdAt).toDateString()}
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
+        {issues.map((issues:any) => (
+            <Table.Body key={issues.id}>
+              <Table.Row key={issues.id}>
+                <Table.Cell>
+                  <Link href={`/issues/${issues.id}`}>
+                    {issues.title}
+                  </Link>
+                  <div className='block md:hidden'>
+                    <IssueStatusBadge status={issues.status} />
+                  </div>
+                </Table.Cell>
+                <Table.Cell className='hidden md:table-cell'>
+                  <IssueStatusBadge status={issues.status} />
+                </Table.Cell>
+                <Table.Cell className='hidden md:table-cell'>
+                  {new Date(issues.createdAt).toDateString()}
+                </Table.Cell>
+             </Table.Row>
+          </Table.Body>
+        ))}
       </Table.Root>
     </div>
   )
