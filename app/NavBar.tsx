@@ -6,7 +6,6 @@ import { PiBug } from 'react-icons/pi'
 
 const NavBar = () => {
     const currentPathname=usePathname();
-    console.log(currentPathname);
     const links= [
         {label:'Dashboard', href:'/'},
         {label:'Issues', href:'/issues'}
