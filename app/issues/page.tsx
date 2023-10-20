@@ -1,16 +1,19 @@
-import { Table } from '@radix-ui/themes'
 import axios from 'axios'
+import { Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
 import IssueActionButton from './IssueActionButton'
+import prisma from '@/prisma/client'
+
 
 const IssuesPage = async() => {
-  const getData = async() => {
-    const res = await axios.get('http://localhost:3000/api/issues');
-    return res.data;
-  }
-  const issues = await getData();
+  // const getData = async() => {
+  //   const res = await fetch('/api/issues');
+  //   return res.json();
+  // }
+  // const issues = await getData();
+  const issues = await prisma.issue.findMany();
   return (
     <div>
       <IssueActionButton />
