@@ -7,18 +7,18 @@ import "easymde/dist/easymde.min.css";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createIssueSchema } from '@/app/validationSchema';
+import { IssueSchema } from '@/app/validationSchema';
 import {z} from 'zod';
 import {ErrorMessage,Spinner} from '@/app/components'
 import { Issue } from '@prisma/client';
 
-type IssueFormData=z.infer<typeof createIssueSchema>
+type IssueFormData=z.infer<typeof IssueSchema>
 const SimpleMDE=dynamic(()=>import('react-simplemde-editor'),{ssr:false});
 
 const IssueForm = ({issue}:{issue?:Issue}) => {
     const router = useRouter()
     const {register,control,handleSubmit, formState:{errors}} = useForm<IssueFormData>({
-        resolver: zodResolver(createIssueSchema)
+        resolver: zodResolver(IssueSchema)
     });
     const [isSubmitting,setSubmitting]=useState(false);
     const [error,setError]=useState('');
