@@ -28,7 +28,7 @@ const IssuesPage = async() => {
             <Table.Body key={issues.id}>
               <Table.Row key={issues.id}>
                 <Table.Cell>
-                  <Link href={`/issues/${issues.id}`}>
+                  <Link href={`/issues/${issues.id}`} className='font-semibold text-blue-600 dark:text-blue-500 hover:underline'>
                     {issues.title}
                   </Link>
                   <div className='block md:hidden'>
