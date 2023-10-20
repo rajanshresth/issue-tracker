@@ -9,9 +9,7 @@ import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createIssueSchema } from '@/app/validationSchema';
 import {z} from 'zod';
-import ErrorMessage from '@/app/components/ErrorMessage';
-import Spinner from '@/app/components/Spinner';
-import delay from 'delay';
+import {ErrorMessage,Spinner} from '@/app/components'
 
 type IssueForm=z.infer<typeof createIssueSchema>
 const SimpleMDE=dynamic(()=>import('react-simplemde-editor'),{ssr:false});
@@ -33,7 +31,6 @@ const NewIssuePage = () => {
             setError('An unexpected error occured.')
         }
     })
-    delay(2000);
   return (
     <div>
         {error && (

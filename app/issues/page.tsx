@@ -3,7 +3,6 @@ import axios from 'axios'
 import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
-import delay from 'delay'
 import IssueActionButton from './IssueActionButton'
 
 const IssuesPage = async() => {
@@ -12,7 +11,6 @@ const IssuesPage = async() => {
     return res.data;
   }
   const issues = await getData();
-  await delay(2000);
   return (
     <div>
       <IssueActionButton />
