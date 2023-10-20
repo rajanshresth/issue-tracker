@@ -1,6 +1,5 @@
 import prisma from '@/prisma/client'
 import { Box, Grid } from '@radix-ui/themes'
-import delay from 'delay'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import EditIssueButton from '../EditIssueButton'
@@ -13,7 +12,6 @@ const IssueDetailPage = async({params}:{params:{id:string}}) => {
     if(!issue) {
         return notFound();
     }
-    delay(2000);
   return (
     <Grid columns={{initial:"1",md:"2"}} gap='5'>
         <Box>
