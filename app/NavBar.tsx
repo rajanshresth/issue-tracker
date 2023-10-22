@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import { PiBug } from 'react-icons/pi'
+import Skeleton from './components/Skeleton'
 
 const NavBar = () => {
    
@@ -47,7 +48,7 @@ const NavLinks=()=>{
 
 const AuthStatus=()=>{
   const {status,data:session}=useSession();
-  if (status==="loading") return null;
+  if (status==="loading") return <Skeleton width={'3rem'} />;
   if(status==="unauthenticated") 
     return <Link href="/api/auth/signin" className="text-zinc-500 hover:text-zinc-950">Login</Link>
   return (
