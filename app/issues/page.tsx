@@ -7,6 +7,7 @@ import prisma from "@/prisma/client";
 import { Issue, Status } from "@prisma/client";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 import Pagination from "../components/Pagination";
+import { stat } from "fs";
 
 interface Props {
   searchParams: {
@@ -77,25 +78,26 @@ const IssuesPage = async ({ searchParams }: Props) => {
             ))}
           </Table.Row>
         </Table.Header>
-        {issues.map((issues: any) => (
-          <Table.Body key={issues.id}>
-            <Table.Row key={issues.id}>
-              <Table.Cell>
+        {issues.map((issue) => (
+          <Table.Body key={issue.id}>
+            <Table.Row key={issue.id}>
+              <Table.Cell key={issue.id}>
                 <Link
-                  href={`/issues/${issues.id}`}
+                  key={issue.id}
+                  href={`/issues/${issue.id}`}
                   className="font-semibold text-blue-600 dark:text-blue-500 hover:underline"
                 >
-                  {issues.title}
+                  {issue.title}
                 </Link>
                 <div className="block md:hidden">
-                  <IssueStatusBadge status={issues.status} />
+                  <IssueStatusBadge status={issue.status} />
                 </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                <IssueStatusBadge status={issues.status} />
+                <IssueStatusBadge status={issue.status} />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {new Date(issues.createdAt).toDateString()}
+                {new Date(issue.createdAt).toDateString()}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
