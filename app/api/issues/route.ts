@@ -1,12 +1,13 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { IssueSchema } from "../../validationSchema";
-import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
 
 export async function POST(request:NextRequest){
-    const session = await getServerSession(authOptions);
-    if(!session)
+    const res = await fetch(new URL('/api/auth/session', request.nextUrl.origin), {
+        headers: { cookie: request.headers.get('cookie') || '' }
+    });
+    const authData = await res.json().catch(() => null);
+    if(!authData?.session)
         return NextResponse.json({},{status:401});
     const body = await request.json();
     const validation = IssueSchema.safeParse(body);
