@@ -1,15 +1,14 @@
-import authOptions from "@/app/auth/authOptions";
-import { patchIssueSchema } from "@/app/validationSchema"
+import { NextResponse } from "next/server";
+import { patchIssueSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
-import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({}, { status: 401 });
+export async function PATCH(request: Request) {
+  const origin = new URL(request.url).origin;
+  const res = await fetch(new URL("/api/auth/session", origin), {
+    headers: { cookie: request.headers.get("cookie") || "" },
+  });
+  const authData = await res.json().catch(() => null);
+  if (!authData?.session) return NextResponse.json({}, { status: 401 });
 
   const body = await request.json();
   const validation = patchIssueSchema.safeParse(body);
@@ -25,49 +24,43 @@ export async function PATCH(
       where: { id: assignedToUserId },
     });
     if (!user)
-      return NextResponse.json(
-        { error: "Invalid user." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid user." }, { status: 400 });
   }
 
+  const id = parseInt(new URL(request.url).pathname.split("/").pop() || "");
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id },
   });
   if (!issue)
-    return NextResponse.json(
-      { error: "Invalid issue" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
 
   const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
     data: {
       title,
       description,
-      assignedToUserId
+      assignedToUserId,
     },
   });
 
   return NextResponse.json(updatedIssue);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({}, { status: 401 });
+export async function DELETE(request: Request) {
+  const origin = new URL(request.url).origin;
+  const res = await fetch(new URL("/api/auth/session", origin), {
+    headers: { cookie: request.headers.get("cookie") || "" },
+  });
+  const authData = await res.json().catch(() => null);
+  if (!authData?.session) return NextResponse.json({}, { status: 401 });
 
+  const id = parseInt(new URL(request.url).pathname.split("/").pop() || "");
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id },
   });
 
   if (!issue)
-    return NextResponse.json(
-      { error: "Invalid issue" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
 
   await prisma.issue.delete({
     where: { id: issue.id },
